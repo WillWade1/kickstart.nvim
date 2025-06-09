@@ -2,23 +2,76 @@ return {
 
   {
     'olimorris/codecompanion.nvim',
-    opts = {},
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
-    },
-    config = function()
-      require('codecompanion').setup {
-        stragies = {
-          chat = {
-            adapter = 'anthropic',
-          },
-          inline = {
-            adapter = 'anthropic',
+      'j-hui/fidget.nvim', -- Display status
+      'ravitemer/codecompanion-history.nvim',
+      {
+        'HakonHarnes/img-clip.nvim', -- Share images with the chat buffer
+        event = 'VeryLazy',
+        cmd = 'PasteImage',
+        opts = {
+          filetypes = {
+            codecompanion = {
+              prompt_for_file_name = false,
+              template = '[Image]($FILE_PATH)',
+              use_absolute_path = true,
+            },
           },
         },
-      }
-    end,
+      },
+    },
+    opts = {
+      extensions = {},
+      adapters = {
+        anthropic = function()
+          return require('codecompanion.adapters').extend('anthropic', {
+            env = {
+              api_key = os.getenv 'ANTHROPIC_API_KEY',
+            },
+          })
+        end,
+        gemini = function()
+          return require('codecompanion.adapters').extend('gemini', {
+            env = {
+              api_key = os.getenv 'GEMINI_API_KEY',
+            },
+          })
+        end,
+        openai = function()
+          return require('codecompanion.adapters').extend('openai', {
+            opts = {
+              stream = true,
+            },
+            env = {
+              api_key = os.getenv 'OPENAI_API_KEY',
+            },
+            schema = {
+              model = {
+                default = function()
+                  return 'gpt-4.1'
+                end,
+              },
+            },
+          })
+        end,
+      },
+      strategies = {
+        chat = {
+          adapter = {
+            name = 'copilot',
+            model = 'gpt-4.1',
+          },
+        },
+        inline = {
+          adapter = {
+            name = 'copilot',
+            model = 'gpt-4.1',
+          },
+        },
+      },
+    },
     keys = {
       { '<leader>ka', '<cmd>CodeCompanion<cr>', desc = 'Code Companion' },
       { '<leader>ks', '<cmd>CodeCompanionChat Toggle<cr>', desc = 'Code Companion Chat' },
