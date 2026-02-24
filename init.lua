@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -165,6 +165,10 @@ vim.o.scrolloff = 10
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
+
+vim.o.expandtab = true -- Use spaces instead of tabs
+vim.o.shiftwidth = 4 -- Size of an indent
+vim.o.tabstop = 4 -- Number of spaces tabs count for
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -1017,5 +1021,18 @@ require('lazy').setup({
 })
 vim.cmd [[cab cc CodeCompanion]]
 vim.cmd [[cab co Copilot]]
--- The line beneath this is called `modeline`. See `:help modeline`
+-- Use spaces for HTML and CSS files- The line beneath this is called `modeline`. See `:help modeline`
+vim.api.nvim_create_augroup('HtmlCssFormatting', { clear = true })
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'html', 'css', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+  group = 'HtmlCssFormatting',
+  callback = function()
+    -- Use spaces instead of tabs
+    vim.opt_local.expandtab = true
+    -- Number of spaces a tab is equal to
+    vim.opt_local.tabstop = 2
+    -- Number of spaces to use for indentation
+    vim.opt_local.shiftwidth = 2
+  end,
+})
 -- vim: ts=2 sts=2 sw=2 et

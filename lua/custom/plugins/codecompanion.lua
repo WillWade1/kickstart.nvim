@@ -73,9 +73,8 @@ return {
       },
     },
     keys = {
-      { '<leader>ka', '<cmd>CodeCompanion<cr>', desc = 'Code Companion' },
+      { '<leader>ka', '<cmd>CodeCompanionActions<cr>', desc = 'Code Companion' },
       { '<leader>ks', '<cmd>CodeCompanionChat Toggle<cr>', desc = 'Code Companion Chat' },
-      { '<leader>kl', '<cmd>CodeCompanionInline<cr>', desc = 'Code Companion Inline' },
     },
   },
   {
